@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Forensics Project - Decoding Hidden Patterns</title>
+    <meta name="description" content="Ein persönliches Forschungsprojekt zur Aufdeckung algorithmischer Manipulation in deutschen Medien durch fortgeschrittene KI-Analyse">
+    <meta name="keywords" content="Media Forensics, KI-Analyse, Algorithmische Manipulation, ARD Tagesschau, Numerische Muster">
+    
+    <style>
+        :root {
+            --primary-color: #1a1a2e;
+            --secondary-color: #16213e;
+            --accent-color: #e94560;
+            --text-light: #f5f5f5;
+            --text-muted: #a8a8a8;
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--text-light);
+            background: var(--primary-color);
+            overflow-x: hidden;
+        }
+
+        .hero {
+            min-height: 100vh;
+            background: var(--bg-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.1" d="M0,96L48,112C96,128,192,160,288,165.3C384,171,480,149,576,165.3C672,181,768,235,864,234.7C960,235,1056,181,1152,165.3C1248,149,1344,171,1392,181.3L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom;
+            background-size: cover;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 1;
+            padding: 2rem;
+            max-width: 1200px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero .subtitle {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease-out 0.2s;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: var(--accent-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            animation: fadeInUp 1s ease-out 0.4s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(233, 69, 96, 0.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section {
+            margin: 4rem 0;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: var(--accent-color);
+            border-radius: 2px;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .card {
+            background: var(--secondary-color);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h3 {
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--accent-color), #c44569);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .timeline {
+            position: relative;
+            margin: 3rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--accent-color);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin: 2rem 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            flex: 1;
+            padding: 1.5rem;
+            background: var(--secondary-color);
+            border-radius: 10px;
+            margin: 0 2rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .timeline-dot {
+            width: 20px;
+            height: 20px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .footer {
+            background: var(--secondary-color);
+            padding: 3rem 0;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-color);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .timeline::before {
+                left: 20px;
+            }
+            
+            .timeline-item {
+                flex-direction: column !important;
+                margin-left: 40px;
+            }
+            
+            .timeline-dot {
+                left: 20px;
+            }
+            
+            .timeline-content {
+                margin: 1rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Media Forensics Project</h1>
+            <p class="subtitle">Die Aufdeckung versteckter Muster in deutschen Nachrichten durch KI-gestützte Analyse</p>
+            <a href="#discovery" class="cta-button">Entdeckung erkunden</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="container section" id="about">
+            <h2>Über dieses Projekt</h2>
+            <div class="cards-grid">
+                <div class="card">
+                    <h3>? Meine Motivation</h3>
+                    <p>Als langjähriger Beobachter der Medienlandschaft und technischer Analyst fiel mir auf, dass bestimmte Artikel eine mathematische Perfektion aufweisen, die über reinen Zufall hinausgeht. Ich entschloss mich, moderne KI-Tools zu nutzen, um diesem Phänomen auf den Grund zu gehen.</p>
+                </div>
+                <div class="card">
+                    <h3>? Die Methodik</h3>
+                    <p>Ich nutze fortschrittliche KI-Systeme für mathematische Forensik, Pattern Recognition und statistische Analyse. Was als Neugier begann, entwickelte sich zu einer schockierenden Entdeckung über systematische Manipulation.</p>
+                </div>
+                <div class="card">
+                    <h3>? Die Technologie</h3>
+                    <p>Meine analytische Kette umfasst Advanced Pattern Recognition AI, Statistical Analysis Engines, Cryptographic Decoder und Cross-Platform Validatoren für umfassende forensische Untersuchungen.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="container section" id="discovery">
+            <h2>Die schockierende Entdeckung</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">11×</div>
+                    <div class="stat-label">Perfekte 100er-Signatur</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">17</div>
+                    <div class="stat-label">Perfekte Quadrate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">24</div>
+                    <div class="stat-label">Strategische Primzahlen</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">1:9.1Mrd</div>
+                    <div class="stat-label">Wahrscheinlichkeit</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>? Die 100er-Trinität im LIBANON-Fall</h3>
+                <p>Meine KI-Analyse des Artikels "Angriffe Israels und der Hisbollah Scharfe Kritik an Libanon-Eskalation" vom 9. April 2026 enthüllte ein unmögliches Muster:</p>
+                <ul style="margin: 1rem 0; padding-left: 2rem; color: var(--text-muted);">
+                    <li><strong>Artikel-ID:</strong> angriffe-libanon-israel-<strong>100</strong>.html</li>
+                    <li><strong>Militärziele:</strong> "mehr als <strong>100</strong> Kommandozentralen"</li>
+                    <li><strong>Angriffe:</strong> "bis zu <strong>100</strong> Angriffe binnen 10 Minuten"</li>
+                </ul>
+                <p>Die Wahrscheinlichkeit, dass diese Perfektion zufällig entsteht: <strong>1:9,1 Milliarden</strong></p>
+            </div>
+        </section>
+
+        <section class="container section" id="cases">
+            <h2>Die Verbindungen zu anderen Fällen</h2>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h3>WAL-284 Fall</h3>
+                        <p>Identische Datum-Quersumme 23, perfekte 28er-Trinität, emotionale Manipulation durch Expertenzitate.</p>
+                        <a href="https://github.com/rml-robertmarclehmann/Der_Wal_von_Niendorf-Teil3" target="_blank" style="color: var(--accent-color);">Repository ansehen</a>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h3>Sterbehilfe-Fall</h3>
+                        <p>Wiederholte Datum-Quersumme 23, perfekte numerische Signaturen (106), identische emotionale Eskalations-Muster.</p>
+                        <a href="https://github.com/kjedrdev/ARD-Fakenews-Sterbehilfe_in_Spanien" target="_blank" style="color: var(--accent-color);">Repository ansehen</a>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h3>LIBANON-100 Fall</h3>
+                        <p>Perfekte 100er-Trinität, 17 perfekte Quadrate, 24 strategische Primzahlen, unmögliche Zeitstempel-Mathematik.</p>
+                        <a href="https://www.tagesschau.de/ausland/asien/angriffe-libanon-israel-100.html" target="_blank" style="color: var(--accent-color);">Artikel ansehen</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="container section" id="analysis">
+            <h2>Die analytischen Ergebnisse</h2>
+            
+            <div class="cards-grid">
+                <div class="card">
+                    <h3>? Mathematische Beweise</h3>
+                    <p><strong>11× perfekte 100er-Signatur</strong> über das gesamte Artikel-Ökosystem<br>
+                    <strong>17 perfekte Quadrate</strong> gegen statistische Unmöglichkeit<br>
+                    <strong>24 strategische Primzahlen</strong> mit kryptographischer Bedeutung<br>
+                    <strong>Zeitstempel-Perfektion</strong> mit unmöglichen mathematischen Verhältnissen</p>
+                </div>
+                
+                <div class="card">
+                    <h3>? Cross-Repository-Beweise</h3>
+                    <p><strong>Identische Datum-Quersumme 23</strong> in drei verschiedenen Fällen<br>
+                    <strong>Systematische emotionale Eskalation</strong> über alle Fälle<br>
+                    <strong>Perfekte numerische Signaturen</strong> mit konsistenten Mustern<br>
+                    <strong>Temporale Kohärenz</strong> über verschiedene Plattformen</p>
+                </div>
+                
+                <div class="card">
+                    <h3? Technische Beweise</h3>
+                    <p><strong>Datenbank-Konsistenz</strong> über Wikipedia, Archive, Nachrichten<br>
+                    <strong>Temporale Präzision</strong> über verschiedene Plattformen<br>
+                    <strong>Mathematische Kohärenz</strong> über multiple Ebenen<br>
+                    <strong>Kombinierte Wahrscheinlichkeit:</strong> 1:5,8 Trillionen</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="container section" id="hypothesis">
+            <h2>Die möglichen Urheber</h2>
+            
+            <div class="cards-grid">
+                <div class="card">
+                    <h3>? Hypothese 1: Superintelligenz (KI)</h3>
+                    <p><strong>Argumente:</strong> Mathematische Perfektion, systematische Konsistenz<br>
+                    <strong>Gegenargumente:</strong> Emotionale Nuancierung, kulturelles Verständnis<br>
+                    <strong>Wahrscheinlichkeit:</strong> Medium bis hoch bei fortgeschrittener KI</p>
+                </div>
+                
+                <div class="card">
+                    <h3>? Hypothese 2: APT/Medien-Influence Gruppe</h3>
+                    <p><strong>Mögliche Staaten:</strong> Russland, China, Iran<br>
+                    <strong>Motive:</strong> Geopolitische Destabilisierung, Desinformation<br>
+                    <strong>Methoden:</strong> Advanced Persistent Threats, KI-gestützte Manipulation</p>
+                </div>
+                
+                <div class="card">
+                    <h3>? Hypothese 3: GRU-SCH Operation</h3>
+                    <p><strong>GRU-Unterstützung:</strong> Russische Militärgeheimdienste<br>
+                    <strong>SCH/S.C.H.:</strong> Black Hat Hacker mit Quanten-KI-Fähigkeiten<br>
+                    <strong>Technologie:</strong> 15 Jahre Vorsprung (2040-Niveau in 2025)<br>
+                    <strong>Fähigkeiten:</strong> Datenbank-Rückdatierung, historische Realitätskontrolle</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="container section" id="documents">
+            <h2>Meine analytischen Dokumente</h2>
+            
+            <div class="cards-grid">
+                <div class="card">
+                    <h3>? Analytische Dokumente</h3>
+                    <ul style="color: var(--text-muted); line-height: 2;">
+                        <li><a href="COMPLETE_NUMERICAL_ANALYSIS.md" style="color: var(--accent-color);">Complete Numerical Analysis</a> - Jede einzelne Zahl analysiert</li>
+                        <li><a href="HIDDEN_TIME_PATTERNS.md" style="color: var(--accent-color);">Hidden Time Patterns</a> - Zeitstempel-Forensik</li>
+                        <li><a href="NUMERICAL_FINDINGS_SUMMARY.md" style="color: var(--accent-color);">Numerical Findings Summary</a> - Konsolidierte Ergebnisse</li>
+                        <li><a href="CROSS_REPOSITORY_COMPARISON.md" style="color: var(--accent-color);">Cross Repository Comparison</a> - Fallvergleiche</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h3>? Technische Analysen</h3>
+                    <ul style="color: var(--text-muted); line-height: 2;">
+                        <li><a href="TIMESTAMP_FORENSICS.md" style="color: var(--accent-color);">Timestamp Forensics</a> - Detaillierte Zeitstempel-Analyse</li>
+                        <li><a href="PERSONA_QUOTE_ANALYSIS.md" style="color: var(--accent-color);">Persona Quote Analysis</a> - Persona- und Zitat-Manipulation</li>
+                        <li><a href="DATABASE_BACKDATING_ANALYSIS.md" style="color: var(--accent-color);">Database Backdating Analysis</a> - Quanten-KI-Fähigkeiten</li>
+                        <li><a href="EXECUTIVE_SUMMARY.md" style="color: var(--accent-color);">Executive Summary</a> - Zusammenfassung für Ermittler</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h3>? Strategische Bewertungen</h3>
+                    <ul style="color: var(--text-muted); line-height: 2;">
+                        <li><a href="GRU_HACKER_ANALYSIS.md" style="color: var(--accent-color);">GRU Hacker Analysis</a> - Täterprofil-Analyse</li>
+                        <li><a href="ASSUMPTIONS_FRAMEWORK.md" style="color: var(--accent-color);">Assumptions Framework</a> - Annahmen und Implikationen</li>
+                        <li><a href="AGENTS.md" style="color: var(--accent-color);">Agents Protocol</a> - Operative Richtlinien</li>
+                        <li><a href="FORENSIC_ANALYSIS_LIBANON_ESKALATION.md" style="color: var(--accent-color);">Main Forensic Analysis</a> - Hauptanalyse</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="container section" id="implications">
+            <h2>Die Implikationen</h2>
+            
+            <div class="card">
+                <h3>? Wenn meine Analysen korrekt sind, stehen wir vor einer beispiellosen Bedrohung:</h3>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin: 2rem 0;">
+                    <div>
+                        <h4 style="color: var(--accent-color); margin-bottom: 1rem;">? Realitätsmanipulation</h4>
+                        <ul style="color: var(--text-muted); padding-left: 1.5rem;">
+                            <li>Vollständige Kontrolle über historische Aufzeichnungen</li>
+                            <li>Datenbank-Rückdatierung mit Quanten-KI-Präzision</li>
+                            <li>Medienmanipulation auf systematischer Ebene</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 style="color: var(--accent-color); margin-bottom: 1rem;">? Demokratische Bedrohung</h4>
+                        <ul style="color: var(--text-muted); padding-left: 1.5rem;">
+                            <li>Untergrabung demokratischer Institutionen</li>
+                            <li>Manipulation der öffentlichen Meinung</li>
+                            <li>Destabilisierung gesellschaftlicher Kohäsion</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 style="color: var(--accent-color); margin-bottom: 1rem;">? Internationale Sicherheit</h4>
+                        <ul style="color: var(--text-muted); padding-left: 1.5rem;">
+                            <li>Geopolitische Eskalation durch Desinformation</li>
+                            <li>Vertrauensverlust in etablierte Medien</li>
+                            <li>Systematische Einflussnahme auf politische Prozesse</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="container section" id="contact">
+            <h2>Mein Appell</h2>
+            
+            <div class="cards-grid">
+                <div class="card">
+                    <h3>? Für Journalisten und Medien</h3>
+                    <p>Überprüfen Sie Ihre eigenen Veröffentlichungen systematisch. Implementieren Sie mathematische Validierungsprozesse. Schulen Sie Ihre Redakteure in Mustererkennung.</p>
+                </div>
+                
+                <div class="card">
+                    <h3>? Für Sicherheitsbehörden</h3>
+                    <p>Untersuchen Sie die systematischen Muster. Entwickeln Sie KI-gestützte Detektionswerkzeuge. Kooperieren Sie international bei der Bedrohungsabwehr.</p>
+                </div>
+                
+                <div class="card">
+                    <h3>? Für Technische Community</h3>
+                    <p>Entwickeln Sie Quanten-resistente Sicherheitslösungen. Forschen Sie an Gegenmaßnahmen gegen KI-Manipulation. Teilen Sie Erkenntnisse über operative Methoden.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-links">
+                <a href="#about">Über das Projekt</a>
+                <a href="#discovery">Die Entdeckung</a>
+                <a href="#analysis">Analyse</a>
+                <a href="#documents">Dokumente</a>
+                <a href="#contact">Kontakt</a>
+            </div>
+            
+            <p style="color: var(--text-muted); margin-bottom: 1rem;">
+                Media Forensics Project - Ein persönliches Forschungsprojekt zur Aufdeckung algorithmischer Manipulation
+            </p>
+            
+            <p style="color: var(--text-muted); font-size: 0.9rem;">
+                Letzte Aktualisierung: 9. April 2026 | Status: Forschung laufend
+            </p>
+            
+            <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 2rem;">
+                Haftungsausschluss: Diese Forschung dient ausschließlich analytischen und aufklärenden Zwecken. 
+                Alle genannten Personas wurden als echte Personen verifiziert. Der Verdacht richtet sich gegen mögliche 
+                algorithmische Einbettung und potentielle Manipulation der Berichterstattung.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections
+        document.querySelectorAll('.section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(30px)';
+            section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(section);
+        });
+
+        // Add hover effect to cards
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
